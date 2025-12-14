@@ -150,10 +150,10 @@ Material:
     - Vector1_F8BF2348: 1
     - _AlphaClip: 0
     - _Amplitude: 5
-    - _Amplitude1: 2
-    - _Amplitude2: 2
-    - _Amplitude3: 2
-    - _Amplitude4: 1
+    - _Amplitude1: 0.5
+    - _Amplitude2: 0.5
+    - _Amplitude3: 0.5
+    - _Amplitude4: 0.5
     - _Blend: 0
     - _BumpScale: 1
     - _ColorBlend: 0.62
