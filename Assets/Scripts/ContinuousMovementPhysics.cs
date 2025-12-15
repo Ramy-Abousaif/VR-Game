@@ -53,7 +53,7 @@ public class ContinuousMovementPhysics : MonoBehaviour
             
             float handSpeed = ((leftHandRB.linearVelocity - rb.linearVelocity).magnitude + (rightHandRB.linearVelocity - rb.linearVelocity).magnitude) / 2.0f;
 
-            if(isGrounded && handSpeed > minJumpWithHandSpeed)
+            if(inputJumpPressed && isGrounded && handSpeed > minJumpWithHandSpeed)
             {
                 rb.linearVelocity = Vector3.up * Mathf.Clamp(handSpeed, minJumpWithHandSpeed, maxJumpWithHandSpeed);
             }
