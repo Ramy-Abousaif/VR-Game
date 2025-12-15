@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class Buoyancy : MonoBehaviour
 {
-    public float waterVelocityDrag = 0.99f;
-    public float waterAngularDrag = 0.5f;
+    public float depthBeforeSubmerged = 1f;
+    public float displacementAmount = 3f;
 
-    [Range(1, 5)] public float strength;
-    [Range(1, 5)] public float objectDepth;
+    public float waterDrag = 0.99f;
+    public float waterAngularDrag = 0.5f;
 
     public bool active = true;
 
-    #region Private Fields
     private int floaters;
-    [HideInInspector]
     public Rigidbody rb;
-    #endregion
 
     private void Start()
     {
-        rb = GetComponentInParent<Rigidbody>();
+        if(rb == null)
+        {
+            rb = GetComponentInParent<Rigidbody>();
+        }
+
         floaters = transform.parent.childCount;
 
         if (rb.useGravity)
@@ -33,7 +34,7 @@ public class Buoyancy : MonoBehaviour
             return;
 
         // Manual gravity subdivided based on the amount of floaters.
-        rb.AddForceAtPosition(Physics.gravity * rb.mass / floaters, transform.position, ForceMode.Acceleration);
+        rb.AddForceAtPosition(Physics.gravity * floaters, transform.position, ForceMode.Acceleration);
 
         if (!active)
             return;
@@ -43,17 +44,16 @@ public class Buoyancy : MonoBehaviour
         // If the floater is below water
         if (transform.position.y < wH)
         {
-            float submersion = Mathf.Clamp01(wH - transform.position.y) / objectDepth;
-            float buoyancy = Mathf.Abs(Physics.gravity.y) * submersion * strength * rb.mass;
+            float displacementMultiplier = Mathf.Clamp01((wH - transform.position.y) / depthBeforeSubmerged) * displacementAmount;
 
             // Buoyant Force
-            rb.AddForceAtPosition(Vector3.up * buoyancy, transform.position, ForceMode.Acceleration);
+            rb.AddForceAtPosition(new Vector3(0f, Mathf.Abs(Physics.gravity.y) * displacementAmount * displacementMultiplier, 0f), transform.position, ForceMode.Acceleration);
 
             // Drag Force
-            rb.AddForce(-rb.linearVelocity * waterVelocityDrag * Time.fixedDeltaTime * strength, ForceMode.VelocityChange);
+            rb.AddForce(displacementMultiplier * -rb.linearVelocity * waterDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
             // Torque Force
-            rb.AddTorque(-rb.angularVelocity * waterAngularDrag * Time.fixedDeltaTime * strength, ForceMode.VelocityChange);
+            rb.AddTorque(displacementMultiplier * -rb.angularVelocity * waterAngularDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
     }
 
