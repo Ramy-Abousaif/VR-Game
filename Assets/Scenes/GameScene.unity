@@ -8162,7 +8162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5686134208185362930, guid: 1fd3a7c43c8190f4d8c167ebde694364, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5686134208185362932, guid: 1fd3a7c43c8190f4d8c167ebde694364, type: 3}
       propertyPath: m_Layer
@@ -8238,7 +8238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 109434732395284509, guid: 65847589f926b734d9eaed6e25f0046b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 109434732395284511, guid: 65847589f926b734d9eaed6e25f0046b, type: 3}
       propertyPath: m_Layer
@@ -11821,6 +11821,7 @@ GameObject:
   - component: {fileID: 8750196627784593828}
   - component: {fileID: 8750196627784593830}
   - component: {fileID: 8750196627784593831}
+  - component: {fileID: 8750196627784593832}
   m_Layer: 0
   m_Name: VR Character IK
   m_TagString: Untagged
@@ -12075,6 +12076,36 @@ MonoBehaviour:
         m_Flags: 0
       m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   animator: {fileID: 3426920099235638233}
+--- !u!114 &8750196627784593832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225017490680032025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4146010a3fd40aa458669f8cb3521e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  leftArm:
+    upperArm: {fileID: 161015625688237594}
+    lowerArm: {fileID: 5060436989486654236}
+    hand: {fileID: 8197490713001850673}
+    target: {fileID: 544940972}
+    armLength: 0
+    upperStartScale: {x: 0, y: 0, z: 0}
+    lowerStartScale: {x: 0, y: 0, z: 0}
+  rightArm:
+    upperArm: {fileID: 4820428317998269441}
+    lowerArm: {fileID: 2144852909736294426}
+    hand: {fileID: 8305180264817297941}
+    target: {fileID: 2106489559}
+    armLength: 0
+    upperStartScale: {x: 0, y: 0, z: 0}
+    lowerStartScale: {x: 0, y: 0, z: 0}
+  maxStretch: 1.1
+  stretchStartThreshold: 0.95
 --- !u!1 &8808683259089955442
 GameObject:
   m_ObjectHideFlags: 0
