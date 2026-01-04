@@ -44,7 +44,11 @@ public class ContinuousMovementPhysics : MonoBehaviour
             if(jumpInput && isGrounded)
             {
                 jumpVelocity = Mathf.Sqrt(2 * -Physics.gravity.y * jumpHeight);
-                rb.linearVelocity = Vector3.up * jumpVelocity;
+                rb.linearVelocity = new Vector3(
+                    rb.linearVelocity.x,
+                    jumpVelocity,
+                    rb.linearVelocity.z
+                );
             }   
         }
         else
@@ -55,7 +59,11 @@ public class ContinuousMovementPhysics : MonoBehaviour
 
             if(inputJumpPressed && isGrounded && handSpeed > minJumpWithHandSpeed)
             {
-                rb.linearVelocity = Vector3.up * Mathf.Clamp(handSpeed, minJumpWithHandSpeed, maxJumpWithHandSpeed);
+                rb.linearVelocity = new Vector3(
+                    rb.linearVelocity.x,
+                    Mathf.Clamp(handSpeed, minJumpWithHandSpeed, maxJumpWithHandSpeed),
+                    rb.linearVelocity.z
+                );
             }
         }
     }
