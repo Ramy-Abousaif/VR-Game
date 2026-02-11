@@ -22,38 +22,46 @@ public class Buoyancy : MonoBehaviour
             rb = GetComponentInParent<Rigidbody>();
         }
 
-        floaters = transform.parent.childCount;
+        rb.centerOfMass = new Vector3(0f, -0.5f, 0f);
 
-        if (rb.useGravity)
-            rb.useGravity = false;
+        floaters = transform.parent.childCount;
     }
 
     private void FixedUpdate()
     {
-        if (rb == null)
+        if (!active || rb == null)
             return;
 
-        // Manual gravity subdivided based on the amount of floaters.
-        rb.AddForceAtPosition(Physics.gravity * floaters, transform.position, ForceMode.Acceleration);
+        float waterHeight = WaveManager.instance.getHeight(transform.position.x, transform.position.z);
 
-        if (!active)
-            return;
-
-        float wH = WaveManager.instance.getHeight(transform.position.x, transform.position.z);
-
-        // If the floater is below water
-        if (transform.position.y < wH)
+        if (transform.position.y < waterHeight)
         {
-            float displacementMultiplier = Mathf.Clamp01((wH - transform.position.y) / depthBeforeSubmerged) * displacementAmount;
+            float depth = waterHeight - transform.position.y;
 
-            // Buoyant Force
-            rb.AddForceAtPosition(new Vector3(0f, Mathf.Abs(Physics.gravity.y) * displacementAmount * displacementMultiplier, 0f), transform.position, ForceMode.Acceleration);
+            float displacementMultiplier = Mathf.Clamp01(depth / depthBeforeSubmerged);
 
-            // Drag Force
-            rb.AddForce(displacementMultiplier * -rb.linearVelocity * waterDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
+            // TOTAL gravity force on boat
+            float gravityForce = rb.mass * Mathf.Abs(Physics.gravity.y);
 
-            // Torque Force
-            rb.AddTorque(displacementMultiplier * -rb.angularVelocity * waterAngularDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
+            float buoyancyStrength = 1.6f; // tweak between 1.1–1.6
+
+            float buoyancyPerFloater =
+                (gravityForce * buoyancyStrength) / transform.parent.childCount;
+
+            // Final buoyancy force
+            float buoyancyForce = buoyancyPerFloater * displacementMultiplier;
+
+            // Damping (vertical only)
+            float velocityY = rb.GetPointVelocity(transform.position).y;
+            float dampingForce = velocityY * 2f;
+
+            float totalForce = buoyancyForce - dampingForce;
+
+            rb.AddForceAtPosition(
+                Vector3.up * totalForce,
+                transform.position,
+                ForceMode.Force
+            );
         }
     }
 
